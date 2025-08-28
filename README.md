@@ -47,9 +47,10 @@ Frontend for the **QuizMe App**, built with:
 - npm or yarn
 - Backend API running (default: `http://localhost:8000`)
 
-### 2. Install
-
+### 2. Clone & Install
 ```bash
+git clone https://github.com/abiolafasanya/quizapp-frontend
+cd quizapp-frontend
 npm install
 ```
 
