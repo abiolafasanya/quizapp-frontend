@@ -1,9 +1,10 @@
+import type { User } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface AuthState {
   token: string | null;
-  user: { id: string; name: string; email: string } | null;
+  user: User | null;
   setAuth: (token: AuthState["token"], user: AuthState["user"]) => void;
   logout: () => void;
 }
