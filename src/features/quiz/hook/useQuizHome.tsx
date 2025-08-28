@@ -31,7 +31,6 @@ export default function useQuizHome() {
     activeOnly: true, // optional
   });
   // const { data, isLoading } = useQuestions(true, runs);
-  console.log("data", data);
   const createQ = useCreateQuestion();
   const delQ = useDeleteQuestion();
   const updQ = useUpdateQuestion();
