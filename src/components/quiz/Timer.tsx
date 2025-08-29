@@ -14,7 +14,7 @@ export default function Timer({ startTs }: { startTs: number | null }) {
   const ss = String(elapsed % 60).padStart(2, "0");
   return (
     <div className="text-sm font-semibold text-accent-600">
-      ⏱ {mm}:{ss}
+      {mm}:{ss}
     </div>
   );
 }

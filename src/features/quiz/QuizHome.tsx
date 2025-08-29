@@ -1,11 +1,23 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Plus, Pencil, Trash, X, ArrowUpDown, ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash,
+  X,
+  ArrowUpDown,
+  ChevronRight,
+  ChevronsRight,
+  ChevronLeft,
+  ChevronsLeft,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/Button";
 import TextInput from "@/components/TextInput";
 import { Controller } from "react-hook-form";
 import { Select } from "@/components/Select"; // inside your form JSX
 import useQuizHome from "./hook/useQuizHome";
+import type { ID } from "@/types";
+import PageLoader from "@/components/PageLoader";
 
 export default function QuizHome() {
   const {
@@ -39,6 +51,20 @@ export default function QuizHome() {
     setOpen,
   } = useQuizHome();
 
+  function handleDelete(id: ID) {
+    const confirmEnd = window.confirm(
+      "Are you sure of this action?"
+    );
+    if (confirmEnd) {
+      delQ.mutate(id, {
+        onSuccess: () => {
+          toast.success("Deleted");
+        },
+        onError: () => toast.error("Failed to delete"),
+      });
+    }
+  }
+
   const startIndex = (page - 1) * limit + 1;
   const endIndex = meta
     ? Math.min(page * limit, meta.totalCount)
@@ -64,12 +90,6 @@ export default function QuizHome() {
           </Button>
         </div>
       </div>
-      {/* <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Manage Questions</h1>
-        <Button className="btn-primary flex items-center gap-1" onClick={onAdd}>
-          <Plus size={16} /> Add Question
-        </Button>
-      </div> */}
 
       {/* Table */}
 
@@ -88,7 +108,7 @@ export default function QuizHome() {
             {isLoading ? (
               <tr>
                 <td className="p-6 text-center text-gray-500" colSpan={5}>
-                  Loading…
+                  <PageLoader />
                 </td>
               </tr>
             ) : questions?.length ? (
@@ -109,16 +129,8 @@ export default function QuizHome() {
                       </Button>
                       <Button
                         className="btn-ghost text-red-600"
-                        onClick={() =>
-                          delQ.mutate(q.id, {
-                            onSuccess: () => {
-                              toast.success("Deleted");
-                              // if you want to auto-jump page when last row deleted,
-                              // use the effect already in the hook.
-                            },
-                            onError: () => toast.error("Failed to delete"),
-                          })
-                        }
+                        onClick={() => handleDelete(q.id)}
+                        disabled={delQ.isPending}
                       >
                         <Trash size={14} />
                       </Button>

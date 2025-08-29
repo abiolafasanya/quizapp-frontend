@@ -16,6 +16,7 @@ interface QuizState {
   answer: (questionId: ID, optionKey: ID) => void;
   next: () => void;
   prev: () => void;
+  begin: () => void;
   reset: () => void;
   setHasHydrated: (v: boolean) => void;
 }
@@ -39,11 +40,21 @@ export const useQuizStore = create<QuizState>()(
 
       prev: () => set((s) => ({ index: Math.max(s.index - 1, 0) })),
 
-      reset: () => {
-        set({ questions: [], index: 0, answers: {}, startTs: null });
-        // If you also want to wipe localStorage when pressing "Retake":
-        // useQuizStore.persist.clearStorage();
-      },
+      begin: () =>
+        set({
+          startTs: Date.now(),
+          index: 0,
+          answers: {},
+        }),
+
+      reset: () =>
+        set({
+          questions: [],
+          index: 0,
+          answers: {},
+          startTs: null, // ensures start screen on next run
+        }),
+
 
       setHasHydrated: (v) => set({ hasHydrated: v }),
     }),
